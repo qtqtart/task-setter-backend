@@ -1,4 +1,6 @@
-export interface ConfigurationVariables {
+export interface IConfiguration {
+  APP_PORT: number;
+
   POSTGRES_USER: string;
   POSTGRES_PASSWORD: string;
   POSTGRES_HOST: string;
@@ -7,7 +9,9 @@ export interface ConfigurationVariables {
   POSTGRES_URL: string;
 }
 
-export default (): ConfigurationVariables => ({
+export default (): IConfiguration => ({
+  APP_PORT: parseInt(process.env.APP_PORT, 10),
+
   POSTGRES_USER: process.env.POSTGRES_USER,
   POSTGRES_PASSWORD: process.env.POSTGRES_PASSWORD,
   POSTGRES_HOST: process.env.POSTGRES_HOST,

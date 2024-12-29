@@ -1,18 +1,21 @@
+import { AppModule } from "@app/app.module";
+import { IConfiguration } from "@shared/config/configuration";
+
+import { ConfigService } from "@nestjs/config";
 import { NestFactory } from "@nestjs/core";
 import {
   FastifyAdapter,
   NestFastifyApplication,
 } from "@nestjs/platform-fastify";
 
-import { AppModule } from "./app.module";
-
-async function bootstrap() {
+(async () => {
   const app = await NestFactory.create<NestFastifyApplication>(
     AppModule,
     new FastifyAdapter(),
   );
 
-  await app.listen(3000);
-}
+  const configService = app.get(ConfigService<IConfiguration>);
+  const port = configService.getOrThrow("APP_PORT");
 
-bootstrap();
+  await app.listen(port);
+})();

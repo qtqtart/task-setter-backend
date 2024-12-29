@@ -1,8 +1,8 @@
-import configuration from "@config/configuration";
+import { PrismaModule } from "@app/prisma/prisma.module";
+import configuration from "@shared/config/configuration";
+
 import { Module } from "@nestjs/common";
 import { ConfigModule } from "@nestjs/config";
-
-import { AppController } from "./app.controller";
 
 @Module({
   imports: [
@@ -10,7 +10,7 @@ import { AppController } from "./app.controller";
       isGlobal: true,
       load: [configuration],
     }),
+    PrismaModule,
   ],
-  controllers: [AppController],
 })
 export class AppModule {}

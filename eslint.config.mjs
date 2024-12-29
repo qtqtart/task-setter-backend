@@ -11,7 +11,7 @@ export default ts.config(
     ignores: ["dist", "node_modules"],
   },
   {
-    files: ["**/*.{ts}"],
+    files: ["**/*.ts"],
     languageOptions: {
       globals: {
         ...globals.es2025,
@@ -30,7 +30,19 @@ export default ts.config(
       "no-unused-vars": "off",
       "no-undef": "off",
       //
-      "simple-import-sort/imports": "error",
+      "simple-import-sort/imports": [
+        "error",
+        {
+          groups: [
+            ["^(@app)(/.*|$)", "^(@modules)(/.*|$)", "^(@shared)(/.*|$)"],
+            ["^\\u0000"],
+            ["^node:"],
+            ["^@?\\w"],
+            ["^"],
+            ["^\\."],
+          ],
+        },
+      ],
       "simple-import-sort/exports": "error",
     },
   },
