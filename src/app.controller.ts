@@ -11,7 +11,7 @@ export class AppController {
   @Get("/config")
   getConfig() {
     return {
-      uri: this._configService.getOrThrow("DATABASE_URL"),
+      uri: this._configService.getOrThrow("POSTGRES_URL"),
     };
   }
 }

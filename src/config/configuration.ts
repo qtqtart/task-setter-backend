@@ -1,17 +1,17 @@
 export interface ConfigurationVariables {
-  DATABASE_USER: string;
-  DATABASE_PASSWORD: string;
-  DATABASE_HOST: string;
-  DATABASE_PORT: string;
-  DATABASE_NAME: string;
-  DATABASE_URL: string;
+  POSTGRES_USER: string;
+  POSTGRES_PASSWORD: string;
+  POSTGRES_HOST: string;
+  POSTGRES_PORT: string;
+  POSTGRES_DB: string;
+  POSTGRES_URL: string;
 }
 
 export default (): ConfigurationVariables => ({
-  DATABASE_USER: process.env.DATABASE_USER,
-  DATABASE_PASSWORD: process.env.DATABASE_PASSWORD,
-  DATABASE_HOST: process.env.DATABASE_HOST,
-  DATABASE_PORT: process.env.DATABASE_PORT,
-  DATABASE_NAME: process.env.DATABASE_NAME,
-  DATABASE_URL: process.env.DATABASE_URI,
+  POSTGRES_USER: process.env.POSTGRES_USER,
+  POSTGRES_PASSWORD: process.env.POSTGRES_PASSWORD,
+  POSTGRES_HOST: process.env.POSTGRES_HOST,
+  POSTGRES_PORT: process.env.POSTGRES_PORT,
+  POSTGRES_DB: process.env.POSTGRES_DB,
+  POSTGRES_URL: process.env.POSTGRES_URI,
 });
