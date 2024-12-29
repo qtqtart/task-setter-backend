@@ -7,6 +7,7 @@ import { ConfigModule, ConfigService } from "@nestjs/config";
 import { GraphQLModule } from "@nestjs/graphql";
 
 import { getGraphQLConfig } from "./graphql/graphql.config";
+import { RedisModule } from "./redis/redis.module";
 
 @Module({
   imports: [
@@ -21,6 +22,7 @@ import { getGraphQLConfig } from "./graphql/graphql.config";
       useFactory: getGraphQLConfig,
     }),
     PrismaModule,
+    RedisModule,
   ],
 })
 export class AppModule {}
