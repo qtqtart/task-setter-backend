@@ -26,7 +26,7 @@ import * as expressSession from "express-session";
         domain: configService.getOrThrow("COOKIE_DOMAIN"),
         httpOnly: configService.getOrThrow("COOKIE_HTTP_ONLY"),
         secure: configService.getOrThrow("COOKIE_SECURE"),
-        maxAge: configService.getOrThrow("COOKIE_MAX_AGE"),
+        maxAge: 30 * 24 * 60 * 60 * 1000,
         sameSite: "lax",
       },
       store: new RedisStore({

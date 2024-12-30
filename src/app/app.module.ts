@@ -1,4 +1,4 @@
-import { PrismaModule } from "@app/prisma/prisma.module";
+import { UserModule } from "@modules/user/user.module";
 import configuration from "@shared/config/configuration";
 
 import { ApolloDriver } from "@nestjs/apollo";
@@ -7,6 +7,7 @@ import { ConfigModule, ConfigService } from "@nestjs/config";
 import { GraphQLModule } from "@nestjs/graphql";
 
 import { getGraphQLConfig } from "./graphql/graphql.config";
+import { PrismaModule } from "./prisma/prisma.module";
 import { RedisModule } from "./redis/redis.module";
 
 @Module({
@@ -23,6 +24,8 @@ import { RedisModule } from "./redis/redis.module";
     }),
     PrismaModule,
     RedisModule,
+
+    UserModule,
   ],
 })
 export class AppModule {}

@@ -1,4 +1,3 @@
-import { ms, StringValue } from "@shared/lib/ms";
 import { parseBoolean } from "@shared/lib/parse-boolean";
 
 export interface Configuration {
@@ -27,7 +26,6 @@ export interface Configuration {
   COOKIE_SECRET: string;
   COOKIE_HTTP_ONLY: boolean;
   COOKIE_SECURE: boolean;
-  COOKIE_MAX_AGE: number;
 
   SESSION_NAME: string;
   SESSION_SECRET: string;
@@ -62,7 +60,6 @@ export default (): Configuration => ({
   COOKIE_SECRET: process.env.COOKIE_SECRET,
   COOKIE_HTTP_ONLY: parseBoolean(process.env.COOKIE_HTTP_ONLY),
   COOKIE_SECURE: parseBoolean(process.env.COOKIE_SECURE),
-  COOKIE_MAX_AGE: ms(process.env.COOKIE_MAX_AGE as StringValue),
 
   SESSION_NAME: process.env.SESSION_NAME,
   SESSION_SECRET: process.env.SESSION_SECRET,
