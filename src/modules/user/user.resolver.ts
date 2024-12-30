@@ -10,11 +10,11 @@ export class UserResolver {
 
   @Query(() => [UserModel])
   public async findAll() {
-    return this._userService.findAll();
+    return await this._userService.findAll();
   }
 
   @Mutation(() => UserModel)
   public async create(@Args("data") input: CreateUserInput) {
-    return this._userService.create(input);
+    return await this._userService.create(input);
   }
 }

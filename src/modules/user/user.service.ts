@@ -16,22 +16,22 @@ export class UserService {
   }
 
   public async create(input: CreateUserInput) {
-    const isExistWithUsername = await this._prismaService.user.findUnique({
+    const isExistByUsername = await this._prismaService.user.findUnique({
       where: {
         username: input.username,
       },
     });
 
-    if (isExistWithUsername)
+    if (isExistByUsername)
       throw new ConflictException("user already exist with username");
 
-    const isExistWithEmail = await this._prismaService.user.findUnique({
+    const isExistByEmail = await this._prismaService.user.findUnique({
       where: {
         email: input.email,
       },
     });
 
-    if (isExistWithEmail)
+    if (isExistByEmail)
       throw new ConflictException("user already exist with email");
 
     const passwordHash = await hash(input.password);

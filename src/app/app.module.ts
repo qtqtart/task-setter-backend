@@ -1,3 +1,4 @@
+import { SessionModule } from "@modules/session/session.module";
 import { UserModule } from "@modules/user/user.module";
 import configuration from "@shared/config/configuration";
 
@@ -24,7 +25,8 @@ import { RedisModule } from "./redis/redis.module";
     }),
     PrismaModule,
     RedisModule,
-
+    //
+    SessionModule,
     UserModule,
   ],
 })

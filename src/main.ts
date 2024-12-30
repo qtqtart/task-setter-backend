@@ -7,17 +7,26 @@ import { ConfigService } from "@nestjs/config";
 import { NestFactory } from "@nestjs/core";
 import { RedisStore } from "connect-redis";
 import * as cookieParser from "cookie-parser";
-import * as expressSession from "express-session";
+import * as session from "express-session";
 
 (async () => {
-  const app = await NestFactory.create(AppModule);
+  const app = await NestFactory.create(AppModule, {
+    rawBody: true,
+  });
 
   const redisService = app.get(RedisService);
   const configService = app.get(ConfigService<Configuration>);
 
   app.use(cookieParser(configService.getOrThrow("COOKIE_SECRET")));
+
+  app.useGlobalPipes(
+    new ValidationPipe({
+      transform: true,
+    }),
+  );
+
   app.use(
-    expressSession({
+    session({
       resave: false,
       saveUninitialized: false,
       name: configService.getOrThrow("SESSION_NAME"),
@@ -33,12 +42,6 @@ import * as expressSession from "express-session";
         client: redisService,
         prefix: configService.getOrThrow("SESSION_PREFIX"),
       }),
-    }),
-  );
-
-  app.useGlobalPipes(
-    new ValidationPipe({
-      transform: true,
     }),
   );
 
