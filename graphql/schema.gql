@@ -19,13 +19,15 @@ input LoginInput {
 }
 
 type Mutation {
-  create(data: CreateUserInput!): UserModel!
+  createUser(data: CreateUserInput!): UserModel!
   login(data: LoginInput!): Boolean!
   logout: Boolean!
 }
 
 type Query {
-  findAll: [UserModel!]!
+  findAllUsers: [UserModel!]!
+  findMe: UserModel!
+  findUserById(id: String!): UserModel!
 }
 
 type UserModel {

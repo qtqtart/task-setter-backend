@@ -9,6 +9,16 @@ import { CreateUserInput } from "./inputs/create-user.input";
 export class UserService {
   public constructor(private readonly _prismaService: PrismaService) {}
 
+  public async findById(id: string) {
+    const user = await this._prismaService.user.findUnique({
+      where: {
+        id,
+      },
+    });
+
+    return user;
+  }
+
   public async findAll() {
     const users = await this._prismaService.user.findMany();
 
@@ -22,8 +32,9 @@ export class UserService {
       },
     });
 
-    if (isExistByUsername)
+    if (isExistByUsername) {
       throw new ConflictException("user already exist with username");
+    }
 
     const isExistByEmail = await this._prismaService.user.findUnique({
       where: {
@@ -31,8 +42,9 @@ export class UserService {
       },
     });
 
-    if (isExistByEmail)
+    if (isExistByEmail) {
       throw new ConflictException("user already exist with email");
+    }
 
     const passwordHash = await hash(input.password);
     const user = await this._prismaService.user.create({

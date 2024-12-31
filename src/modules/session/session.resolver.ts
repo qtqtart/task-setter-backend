@@ -9,7 +9,9 @@ import { SessionService } from "./session.service";
 export class SessionResolver {
   public constructor(private readonly _sessionService: SessionService) {}
 
-  @Mutation(() => Boolean)
+  @Mutation(() => Boolean, {
+    name: "login",
+  })
   public async login(
     @Context() { req }: GraphQLContext,
     @Args("data") input: LoginInput,
@@ -17,7 +19,9 @@ export class SessionResolver {
     return await this._sessionService.login(req, input);
   }
 
-  @Mutation(() => Boolean)
+  @Mutation(() => Boolean, {
+    name: "logout",
+  })
   public async logout(@Context() { req }: GraphQLContext) {
     return await this._sessionService.logout(req);
   }

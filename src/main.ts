@@ -1,6 +1,6 @@
 import { AppModule } from "@app/app.module";
 import { RedisService } from "@app/redis/redis.service";
-import { Configuration } from "@shared/config/configuration";
+import { Env } from "@shared/types/evn.types";
 
 import { ValidationPipe } from "@nestjs/common";
 import { ConfigService } from "@nestjs/config";
@@ -10,12 +10,10 @@ import * as cookieParser from "cookie-parser";
 import * as session from "express-session";
 
 (async () => {
-  const app = await NestFactory.create(AppModule, {
-    rawBody: true,
-  });
+  const app = await NestFactory.create(AppModule);
 
   const redisService = app.get(RedisService);
-  const configService = app.get(ConfigService<Configuration>);
+  const configService = app.get(ConfigService<Env>);
 
   app.use(cookieParser(configService.getOrThrow("COOKIE_SECRET")));
 
@@ -32,21 +30,23 @@ import * as session from "express-session";
       name: configService.getOrThrow("SESSION_NAME"),
       secret: configService.getOrThrow("SESSION_SECRET"),
       cookie: {
-        domain: configService.getOrThrow("COOKIE_DOMAIN"),
-        httpOnly: configService.getOrThrow("COOKIE_HTTP_ONLY"),
-        secure: configService.getOrThrow("COOKIE_SECURE"),
+        path: "/",
+        domain: configService.getOrThrow("SESSION_DOMAIN"),
+        httpOnly: configService.getOrThrow("SESSION_HTTP_ONLY"),
+        secure: configService.getOrThrow("SESSION_SECURE"),
         maxAge: 30 * 24 * 60 * 60 * 1000,
         sameSite: "lax",
       },
       store: new RedisStore({
         client: redisService,
-        prefix: configService.getOrThrow("SESSION_PREFIX"),
+        prefix: configService.getOrThrow("SESSION_FOLDER"),
       }),
     }),
   );
 
   app.enableCors({
     credentials: true,
+    origin: configService.getOrThrow("ALLOWED_ORIGIN"),
     exposedHeaders: ["set-cookie"],
   });
 
