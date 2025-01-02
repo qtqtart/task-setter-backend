@@ -16,19 +16,19 @@ export class AuthGuard implements CanActivate {
   public async canActivate(context: ExecutionContext) {
     const gqlContext = GqlExecutionContext.create(context).getContext();
     const req: Request = gqlContext.req;
-    const { userId } = req.session;
+    const { accountId } = req.session;
 
-    if (!userId) {
-      throw new UnauthorizedException("user is unauthorized");
+    if (!accountId) {
+      throw new UnauthorizedException("account is unauthorized");
     }
 
-    const user = await this._prismaService.user.findUnique({
+    const account = await this._prismaService.account.findUnique({
       where: {
-        id: userId,
+        id: accountId,
       },
     });
 
-    req.user = user;
+    req.account = account;
 
     return true;
   }

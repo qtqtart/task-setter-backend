@@ -1,9 +1,9 @@
 import "express";
 
-import { User } from "@prisma/client";
+import { Account } from "@prisma/client";
 
 declare module "express" {
   interface Request {
-    user?: User;
+    account?: Account;
   }
 }

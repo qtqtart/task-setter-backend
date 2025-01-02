@@ -9,13 +9,13 @@ import {
 } from "class-validator";
 
 @InputType()
-export class CreateUserInput {
+export class SignUpInput {
   @Field(() => String)
   @IsString()
   @IsNotEmpty()
   @MaxLength(255)
   @Matches(/^[a-zA-Z0-9]+(?:-[a-zA-Z0-9]+)*$/)
-  public username: string;
+  public name: string;
 
   @Field(() => String)
   @IsString()

@@ -1,5 +1,6 @@
+import { AccountModule } from "@modules/account/account.module";
+import { AuthModule } from "@modules/auth/auth.module";
 import { SessionModule } from "@modules/session/session.module";
-import { UserModule } from "@modules/user/user.module";
 
 import { ApolloDriver } from "@nestjs/apollo";
 import { Module } from "@nestjs/common";
@@ -22,9 +23,9 @@ import { RedisModule } from "./redis/redis.module";
     }),
     PrismaModule,
     RedisModule,
-    //
+    AccountModule,
+    AuthModule,
     SessionModule,
-    UserModule,
   ],
 })
 export class AppModule {}

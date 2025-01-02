@@ -1,55 +1,53 @@
 import { EnvironmentService } from "@app/environment/environment.service";
-import { PrismaService } from "@app/prisma/prisma.service";
 
-import {
-  Injectable,
-  InternalServerErrorException,
-  NotFoundException,
-  UnauthorizedException,
-} from "@nestjs/common";
-import { verify } from "argon2";
+import { Injectable, InternalServerErrorException } from "@nestjs/common";
+import { parse } from "bowser";
 import { Request } from "express";
+import { lookup } from "geoip-lite";
+import { getClientIp } from "request-ip";
 
-import { LoginInput } from "./inputs/login.input";
+import { SessionMetadata } from "./types/session-metadata.types";
 
 @Injectable()
 export class SessionService {
   public constructor(
-    private readonly _prismaService: PrismaService,
     private readonly _environmentService: EnvironmentService,
   ) {}
 
-  public async login(req: Request, input: LoginInput) {
-    const user = await this._prismaService.user.findFirst({
-      where: {
-        OR: [
-          { username: { equals: input.login } },
-          { email: { equals: input.login } },
-        ],
+  public getMetadata(req: Request, userAgent: string) {
+    const ip =
+      this._environmentService.get("NODE_ENV") === "development"
+        ? "100.28.228.100"
+        : getClientIp(req);
+
+    const location = lookup(ip);
+    const device = parse(userAgent);
+
+    const sessionMetadata: SessionMetadata = {
+      ip,
+      locationData: {
+        country: location.country,
+        city: location.city,
+        region: location.region,
+        timezone: location.timezone,
+        latitude: location.ll[0],
+        longitude: location.ll[1],
       },
-    });
+      deviceData: {
+        browser: device.browser.name,
+        engine: device.engine.name,
+        os: device.os.name,
+        platform: device.platform.type,
+      },
+    };
 
-    if (!user) {
-      throw new NotFoundException("user not found by username and email");
-    }
-
-    const isVerifiedPassword = await verify(user.passwordHash, input.password);
-
-    if (!isVerifiedPassword) {
-      throw new UnauthorizedException("invalid password");
-    }
-
-    return this.saveSession(req, user.id);
+    return sessionMetadata;
   }
 
-  public logout(req: Request) {
-    return this.destroySession(req);
-  }
-
-  private saveSession(req: Request, userId: string) {
+  public save(req: Request, accountId: string, metadata: SessionMetadata) {
     return new Promise((resolve, reject) => {
-      req.session.userId = userId;
-      req.session.createdAt = new Date();
+      req.session.accountId = accountId;
+      req.session.metadata = metadata;
 
       req.session.save((error) => {
         if (error) {
@@ -63,7 +61,7 @@ export class SessionService {
     });
   }
 
-  private destroySession(req: Request) {
+  public destroy(req: Request) {
     return new Promise((resolve, reject) => {
       req.session.destroy((error) => {
         if (error) {

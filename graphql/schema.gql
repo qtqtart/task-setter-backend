@@ -2,10 +2,15 @@
 # THIS FILE WAS AUTOMATICALLY GENERATED (DO NOT MODIFY)
 # ------------------------------------------------------
 
-input CreateUserInput {
+type AccountModel {
+  avatar: String
+  bio: String
+  createdAt: DateTime!
   email: String!
-  password: String!
-  username: String!
+  id: ID!
+  name: String!
+  passwordHash: String!
+  updatedAt: DateTime!
 }
 
 """
@@ -13,30 +18,23 @@ A date-time string at UTC, such as 2019-12-03T09:54:33Z, compliant with the date
 """
 scalar DateTime
 
-input LoginInput {
+type Mutation {
+  signIn(data: SignInInput!): Boolean!
+  signOut: Boolean!
+  signUp(data: SignUpInput!): AccountModel!
+}
+
+type Query {
+  findMe: AccountModel!
+}
+
+input SignInInput {
   login: String!
   password: String!
 }
 
-type Mutation {
-  createUser(data: CreateUserInput!): UserModel!
-  login(data: LoginInput!): Boolean!
-  logout: Boolean!
-}
-
-type Query {
-  findAllUsers: [UserModel!]!
-  findMe: UserModel!
-  findUserById(id: String!): UserModel!
-}
-
-type UserModel {
-  avatar: String
-  bio: String
-  createdAt: DateTime!
+input SignUpInput {
   email: String!
-  id: ID!
-  passwordHash: String!
-  updatedAt: DateTime!
-  username: String!
+  name: String!
+  password: String!
 }

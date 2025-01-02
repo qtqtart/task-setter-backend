@@ -1,8 +1,8 @@
-import { extend, Field, ID, ObjectType } from "@nestjs/graphql";
-import { User } from "@prisma/client";
+import { Field, ID, ObjectType } from "@nestjs/graphql";
+import { Account } from "@prisma/client";
 
 @ObjectType()
-export class UserModel implements User {
+export class AccountModel implements Account {
   @Field(() => ID)
   public id: string;
 
@@ -13,7 +13,7 @@ export class UserModel implements User {
   public updatedAt: Date;
 
   @Field(() => String)
-  public username: string;
+  public name: string;
 
   @Field(() => String)
   public email: string;

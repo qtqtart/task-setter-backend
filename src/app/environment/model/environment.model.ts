@@ -1,8 +1,8 @@
 import { IsBoolean, IsNumber, IsString, Max, Min } from "class-validator";
 
-import { ToBoolean } from "./decorators/to-boolean.decorator";
-import { ToPositiveNumber } from "./decorators/to-positive-number";
-import { Environment } from "./environment.types";
+import { ToBoolean } from "../decorators/to-boolean.decorator";
+import { ToPositiveNumber } from "../decorators/to-positive-number";
+import { Environment } from "../types/environment.types";
 
 export class EnvironmentModel implements Environment {
   @IsString()
