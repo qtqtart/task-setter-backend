@@ -1,14 +1,12 @@
+import { EnvironmentService } from "@app/environment/environment.service";
 import { PrismaService } from "@app/prisma/prisma.service";
-import { Env } from "@shared/types/evn.types";
 
 import {
   Injectable,
   InternalServerErrorException,
-  Logger,
   NotFoundException,
   UnauthorizedException,
 } from "@nestjs/common";
-import { ConfigService } from "@nestjs/config";
 import { verify } from "argon2";
 import { Request } from "express";
 
@@ -16,13 +14,9 @@ import { LoginInput } from "./inputs/login.input";
 
 @Injectable()
 export class SessionService {
-  private readonly logger = new Logger(SessionService.name, {
-    timestamp: true,
-  });
-
   public constructor(
     private readonly _prismaService: PrismaService,
-    private readonly _configService: ConfigService<Env>,
+    private readonly _environmentService: EnvironmentService,
   ) {}
 
   public async login(req: Request, input: LoginInput) {
@@ -64,8 +58,6 @@ export class SessionService {
           );
         }
 
-        this.logger.log(req.session.userId);
-
         resolve(true);
       });
     });
@@ -80,9 +72,7 @@ export class SessionService {
           );
         }
 
-        req.res.clearCookie(this._configService.getOrThrow("SESSION_NAME"));
-
-        this.logger.log(req.session.userId);
+        req.res.clearCookie(this._environmentService.get("SESSION_NAME"));
 
         resolve(true);
       });

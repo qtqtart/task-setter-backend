@@ -6,17 +6,14 @@ import { Module } from "@nestjs/common";
 import { ConfigModule, ConfigService } from "@nestjs/config";
 import { GraphQLModule } from "@nestjs/graphql";
 
-import config from "./configs/config.config";
 import { getGraphQLConfig } from "./configs/graphql.config";
+import { EnvironmentModule } from "./environment/environment.module";
 import { PrismaModule } from "./prisma/prisma.module";
 import { RedisModule } from "./redis/redis.module";
 
 @Module({
   imports: [
-    ConfigModule.forRoot({
-      isGlobal: true,
-      load: [config],
-    }),
+    EnvironmentModule,
     GraphQLModule.forRootAsync({
       imports: [ConfigModule],
       inject: [ConfigService],

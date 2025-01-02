@@ -1,4 +1,4 @@
-export interface Env {
+export interface Environment {
   NODE_ENV: string;
 
   ALLOWED_ORIGIN: string;

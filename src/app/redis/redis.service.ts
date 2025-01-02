@@ -1,12 +1,11 @@
-import { Env } from "@shared/types/evn.types";
+import { EnvironmentService } from "@app/environment/environment.service";
 
 import { Injectable } from "@nestjs/common";
-import { ConfigService } from "@nestjs/config";
 import { Redis } from "ioredis";
 
 @Injectable()
 export class RedisService extends Redis {
-  public constructor(private readonly _configService: ConfigService<Env>) {
-    super(_configService.getOrThrow("REDIS_URL"));
+  public constructor(private readonly _environmentService: EnvironmentService) {
+    super(_environmentService.get("REDIS_URL"));
   }
 }

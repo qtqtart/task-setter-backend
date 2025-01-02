@@ -1,9 +1,8 @@
 import { AppModule } from "@app/app.module";
+import { EnvironmentService } from "@app/environment/environment.service";
 import { RedisService } from "@app/redis/redis.service";
-import { Env } from "@shared/types/evn.types";
 
 import { ValidationPipe } from "@nestjs/common";
-import { ConfigService } from "@nestjs/config";
 import { NestFactory } from "@nestjs/core";
 import { RedisStore } from "connect-redis";
 import * as cookieParser from "cookie-parser";
@@ -13,9 +12,9 @@ import * as session from "express-session";
   const app = await NestFactory.create(AppModule);
 
   const redisService = app.get(RedisService);
-  const configService = app.get(ConfigService<Env>);
+  const environmentService = app.get(EnvironmentService);
 
-  app.use(cookieParser(configService.getOrThrow("COOKIE_SECRET")));
+  app.use(cookieParser(environmentService.get("COOKIE_SECRET")));
 
   app.useGlobalPipes(
     new ValidationPipe({
@@ -27,28 +26,28 @@ import * as session from "express-session";
     session({
       resave: false,
       saveUninitialized: false,
-      name: configService.getOrThrow("SESSION_NAME"),
-      secret: configService.getOrThrow("SESSION_SECRET"),
+      secret: environmentService.get("SESSION_SECRET"),
+      name: environmentService.get("SESSION_NAME"),
       cookie: {
         path: "/",
-        domain: configService.getOrThrow("SESSION_DOMAIN"),
-        httpOnly: configService.getOrThrow("SESSION_HTTP_ONLY"),
-        secure: configService.getOrThrow("SESSION_SECURE"),
+        domain: environmentService.get("SESSION_DOMAIN"),
+        secure: environmentService.get("SESSION_SECURE"),
+        httpOnly: environmentService.get("SESSION_HTTP_ONLY"),
         maxAge: 30 * 24 * 60 * 60 * 1000,
         sameSite: "lax",
       },
       store: new RedisStore({
         client: redisService,
-        prefix: configService.getOrThrow("SESSION_FOLDER"),
+        prefix: environmentService.get("SESSION_FOLDER"),
       }),
     }),
   );
 
   app.enableCors({
     credentials: true,
-    origin: configService.getOrThrow("ALLOWED_ORIGIN"),
+    origin: environmentService.get("ALLOWED_ORIGIN"),
     exposedHeaders: ["set-cookie"],
   });
 
-  await app.listen(configService.getOrThrow("APP_PORT"));
+  await app.listen(environmentService.get("APP_PORT"));
 })();

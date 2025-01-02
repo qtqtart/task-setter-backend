@@ -1,23 +1,19 @@
-import { Env } from "@shared/types/evn.types";
+import { EnvironmentService } from "@app/environment/environment.service";
 
 import { ApolloDriverConfig } from "@nestjs/apollo";
-import { ConfigService } from "@nestjs/config";
 import { join } from "path";
 
-export const getGraphQLConfig = (configService: ConfigService<Env>) => {
-  const config: ApolloDriverConfig = {
-    sortSchema: true,
-    introspection: true,
-    autoSchemaFile: join(process.cwd(), "graphql", "schema.gql"),
-    playground: {
-      env: configService.getOrThrow("NODE_ENV"),
-      settings: {
-        "request.credentials": "include",
-      },
+export const getGraphQLConfig = (
+  environmentService: EnvironmentService,
+): ApolloDriverConfig => ({
+  sortSchema: true,
+  path: environmentService.get("GRAPHQL_PREFIX"),
+  autoSchemaFile: join(process.cwd(), "graphql/schema.gql"),
+  playground: {
+    env: environmentService.get("NODE_ENV") === "development",
+    settings: {
+      "request.credentials": "include",
     },
-    path: configService.getOrThrow("GRAPHQL_PREFIX"),
-    context: ({ req, res }) => ({ req, res }),
-  };
-
-  return config;
-};
+  },
+  context: ({ req, res }) => ({ req, res }),
+});
