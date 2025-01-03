@@ -8,10 +8,10 @@ import {
 } from "@nestjs/common";
 import { parse } from "bowser";
 import { Request } from "express";
-import { Session } from "express-session";
 import { lookup } from "geoip-lite";
 import { getClientIp } from "request-ip";
 
+import { SessionModel } from "./models/session.model";
 import { SessionDeviceData } from "./types/session-device-data.types";
 import { SessionLocationData } from "./types/session-location-data.types";
 import { SessionMetadata } from "./types/session-metadata.types";
@@ -92,9 +92,13 @@ export class SessionService {
     const sessionId = req.session.id;
 
     const key = `${this._environmentService.get("SESSION_FOLDER")}${sessionId}`;
-    const session: Session = await this._redisService
+    const session: SessionModel = await this._redisService
       .get(key)
-      .then((_session) => JSON.parse(_session));
+      .then((_session) => JSON.parse(_session))
+      .then((_session) => ({
+        ..._session,
+        id: key.split(":")[1],
+      }));
 
     return session;
   }
@@ -103,13 +107,17 @@ export class SessionService {
     const accountId = req.account.id;
     const sessionId = req.session.id;
 
-    const keys = await this._redisService.get("*");
-    const sessions: Session[] = [];
+    const keys = await this._redisService.keys("*");
+    const sessions: SessionModel[] = [];
 
     for (const key of keys) {
-      const session: Session = await this._redisService
+      const session: SessionModel = await this._redisService
         .get(key)
-        .then((_session) => JSON.parse(_session));
+        .then((_session) => JSON.parse(_session))
+        .then((_session) => ({
+          ..._session,
+          id: key.split(":")[1],
+        }));
 
       if (session.accountId === accountId) {
         sessions.push(session);

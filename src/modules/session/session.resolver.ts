@@ -28,7 +28,7 @@ export class SessionResolver {
 
   @Authorization()
   @Mutation(() => Boolean, {
-    name: "deleteSessionExceptCurrent",
+    name: "deleteExceptCurrentSession",
   })
   public async deleteExceptCurrent(
     @Context() { req }: GraphQLContext,
