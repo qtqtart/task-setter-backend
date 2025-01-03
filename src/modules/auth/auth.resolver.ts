@@ -10,7 +10,7 @@ import { SignUpInput } from "./inputs/sign-up.input";
 
 @Resolver("Auth")
 export class AuthResolver {
-  constructor(private readonly _authService: AuthService) {}
+  public constructor(private readonly _authService: AuthService) {}
 
   @Mutation(() => Boolean, {
     name: "signIn",

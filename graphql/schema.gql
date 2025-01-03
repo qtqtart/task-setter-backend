@@ -19,13 +19,43 @@ A date-time string at UTC, such as 2019-12-03T09:54:33Z, compliant with the date
 scalar DateTime
 
 type Mutation {
+  removeAllSessionExceptCurrent: Boolean!
+  removeSessionExceptCurrent(id: String!): Boolean!
   signIn(data: SignInInput!): Boolean!
   signOut: Boolean!
   signUp(data: SignUpInput!): AccountModel!
 }
 
 type Query {
+  findAllSessionExceptCurrent: [SessionModel!]!
+  findCurrentSession: SessionModel!
   findMe: AccountModel!
+}
+
+type SessionDeviceDataModel {
+  browser: String!
+  os: String!
+  platform: String!
+}
+
+type SessionLocationDataModel {
+  city: String!
+  country: String!
+  latitude: Float!
+  longitude: Float!
+  timezone: String!
+}
+
+type SessionMetadataModel {
+  deviceData: SessionDeviceDataModel!
+  ip: String!
+  locationData: SessionLocationDataModel!
+}
+
+type SessionModel {
+  accountId: String!
+  id: ID!
+  metadata: SessionMetadataModel!
 }
 
 input SignInInput {

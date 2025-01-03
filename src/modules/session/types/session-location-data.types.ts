@@ -1,8 +1,7 @@
 export interface SessionLocationData {
-  country: string;
-  region: string;
-  timezone: string;
   city: string;
+  country: string;
   latitude: number;
   longitude: number;
+  timezone: string;
 }
