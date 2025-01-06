@@ -1,4 +1,4 @@
-# trend-setter-backend
+# task-setter-backend
 
 ### start up application
 

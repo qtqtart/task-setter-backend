@@ -29,5 +29,8 @@ export interface Environment {
   SESSION_SECURE: boolean;
   SESSION_HTTP_ONLY: boolean;
 
+  MAILER_USER: string;
+  MAILER_PASSWORD: string;
+
   GRAPHQL_PREFIX: string;
 }

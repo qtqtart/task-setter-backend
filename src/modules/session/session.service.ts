@@ -55,7 +55,9 @@ export class SessionService {
     return sessionMetadata;
   }
 
-  public save(req: Request, accountId: string, metadata: SessionMetadata) {
+  public save(req: Request, accountId: string, userAgent: string) {
+    const metadata = this.getMetadata(req, userAgent);
+
     return new Promise((resolve, reject) => {
       req.session.accountId = accountId;
       req.session.metadata = metadata;

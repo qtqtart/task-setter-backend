@@ -86,5 +86,11 @@ export class EnvironmentModel implements Environment {
   public SESSION_HTTP_ONLY: boolean;
 
   @IsString()
+  public MAILER_USER: string;
+
+  @IsString()
+  public MAILER_PASSWORD: string;
+
+  @IsString()
   public GRAPHQL_PREFIX: string;
 }

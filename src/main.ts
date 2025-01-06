@@ -1,6 +1,7 @@
 import { AppModule } from "@app/app.module";
 import { EnvironmentService } from "@app/environment/environment.service";
 import { RedisService } from "@app/redis/redis.service";
+import { TO_MS } from "@shared/consts/to-ms.const";
 
 import { ValidationPipe } from "@nestjs/common";
 import { NestFactory } from "@nestjs/core";
@@ -9,6 +10,8 @@ import * as cookieParser from "cookie-parser";
 import * as session from "express-session";
 
 (async () => {
+  const { _30days } = TO_MS;
+
   const app = await NestFactory.create(AppModule);
 
   const redisService = app.get(RedisService);
@@ -33,7 +36,7 @@ import * as session from "express-session";
         domain: environmentService.get("SESSION_DOMAIN"),
         secure: environmentService.get("SESSION_SECURE"),
         httpOnly: environmentService.get("SESSION_HTTP_ONLY"),
-        maxAge: 30 * 24 * 60 * 60 * 1000,
+        maxAge: _30days,
         sameSite: "lax",
       },
       store: new RedisStore({

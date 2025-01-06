@@ -1,9 +1,12 @@
-import { Field, ID, ObjectType } from "@nestjs/graphql";
+import { Field, ObjectType } from "@nestjs/graphql";
 import { Account } from "@prisma/client";
+import { IsNotEmpty, IsUUID } from "class-validator";
 
 @ObjectType()
 export class AccountModel implements Account {
-  @Field(() => ID)
+  @Field(() => String)
+  @IsUUID("4")
+  @IsNotEmpty()
   public id: string;
 
   @Field(() => Date)
@@ -13,12 +16,15 @@ export class AccountModel implements Account {
   public updatedAt: Date;
 
   @Field(() => String)
+  @IsNotEmpty()
   public name: string;
 
   @Field(() => String)
+  @IsNotEmpty()
   public email: string;
 
   @Field(() => String)
+  @IsNotEmpty()
   public passwordHash: string;
 
   @Field(() => String, {
@@ -30,4 +36,7 @@ export class AccountModel implements Account {
     nullable: true,
   })
   public bio: string;
+
+  @Field(() => Boolean)
+  public isVerifiedEmail: boolean;
 }

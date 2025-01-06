@@ -7,7 +7,8 @@ type AccountModel {
   bio: String
   createdAt: DateTime!
   email: String!
-  id: ID!
+  id: String!
+  isVerifiedEmail: Boolean!
   name: String!
   passwordHash: String!
   updatedAt: DateTime!
@@ -23,7 +24,8 @@ type Mutation {
   deleteExceptCurrentSession(id: String!): Boolean!
   signIn(data: SignInInput!): Boolean!
   signOut: Boolean!
-  signUp(data: SignUpInput!): AccountModel!
+  signUp(data: SignUpInput!): Boolean!
+  verifyAccount: Boolean!
 }
 
 type Query {
@@ -54,7 +56,7 @@ type SessionMetadataModel {
 
 type SessionModel {
   accountId: String!
-  id: ID!
+  id: String!
   metadata: SessionMetadataModel!
 }
 

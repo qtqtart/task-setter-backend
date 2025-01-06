@@ -1,6 +1,5 @@
-import { AccountModel } from "@modules/account/models/account.model";
 import { UserAgent } from "@shared/decorators/user-agent.decorator";
-import { GraphQLContext } from "@shared/types/graphql-context.types";
+import { GqlContext } from "@shared/types/graphql-context.types";
 
 import { Args, Context, Mutation, Resolver } from "@nestjs/graphql";
 
@@ -16,14 +15,14 @@ export class AuthResolver {
     name: "signIn",
   })
   public async signIn(
-    @Context() { req }: GraphQLContext,
+    @Context() { req }: GqlContext,
     @Args("data") input: SignInInput,
     @UserAgent() userAgent: string,
   ) {
     return await this._authService.signIn(req, input, userAgent);
   }
 
-  @Mutation(() => AccountModel, {
+  @Mutation(() => Boolean, {
     name: "signUp",
   })
   public async signUp(@Args("data") input: SignUpInput) {
@@ -33,7 +32,7 @@ export class AuthResolver {
   @Mutation(() => Boolean, {
     name: "signOut",
   })
-  public async signOut(@Context() { req }: GraphQLContext) {
+  public async signOut(@Context() { req }: GqlContext) {
     return this._authService.signOut(req);
   }
 }

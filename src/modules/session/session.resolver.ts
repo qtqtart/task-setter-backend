@@ -1,5 +1,5 @@
 import { Authorization } from "@shared/decorators/authorization.decorator";
-import { GraphQLContext } from "@shared/types/graphql-context.types";
+import { GqlContext } from "@shared/types/graphql-context.types";
 
 import { Args, Context, Mutation, Query, Resolver } from "@nestjs/graphql";
 
@@ -14,7 +14,7 @@ export class SessionResolver {
   @Query(() => SessionModel, {
     name: "findCurrentSession",
   })
-  public async findCurrent(@Context() { req }: GraphQLContext) {
+  public async findCurrent(@Context() { req }: GqlContext) {
     return await this._sessionService.findCurrent(req);
   }
 
@@ -22,7 +22,7 @@ export class SessionResolver {
   @Query(() => [SessionModel], {
     name: "findAllSessionExceptCurrent",
   })
-  public async findAllExceptCurrent(@Context() { req }: GraphQLContext) {
+  public async findAllExceptCurrent(@Context() { req }: GqlContext) {
     return await this._sessionService.findAllExceptCurrent(req);
   }
 
@@ -31,7 +31,7 @@ export class SessionResolver {
     name: "deleteExceptCurrentSession",
   })
   public async deleteExceptCurrent(
-    @Context() { req }: GraphQLContext,
+    @Context() { req }: GqlContext,
     @Args("id") id: string,
   ) {
     return await this._sessionService.deleteExceptCurrent(req, id);
@@ -41,9 +41,7 @@ export class SessionResolver {
   @Mutation(() => Boolean, {
     name: "deleteAllSessionExceptCurrent",
   })
-  public async deleteAllSessionExceptCurrent(
-    @Context() { req }: GraphQLContext,
-  ) {
+  public async deleteAllSessionExceptCurrent(@Context() { req }: GqlContext) {
     return await this._sessionService.deleteAllExceptCurrent(req);
   }
 }

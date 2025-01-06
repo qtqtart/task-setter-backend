@@ -1,5 +1,6 @@
 import { PrismaService } from "@app/prisma/prisma.service";
 import { SessionService } from "@modules/session/session.service";
+import { VerificationService } from "@modules/verification/verification.service";
 
 import {
   ConflictException,
@@ -18,6 +19,7 @@ export class AuthService {
   public constructor(
     private readonly _prismaService: PrismaService,
     private readonly _sessionService: SessionService,
+    private readonly _verificationService: VerificationService,
   ) {}
 
   public async signIn(req: Request, input: SignInInput, userAgent: string) {
@@ -43,9 +45,7 @@ export class AuthService {
       throw new UnauthorizedException("invalid password");
     }
 
-    const metadata = this._sessionService.getMetadata(req, userAgent);
-
-    return this._sessionService.save(req, account.id, metadata);
+    return this._sessionService.save(req, account.id, userAgent);
   }
 
   public async signUp(input: SignUpInput) {
@@ -70,6 +70,7 @@ export class AuthService {
     }
 
     const passwordHash = await hash(input.password);
+
     const account = await this._prismaService.account.create({
       data: {
         name: input.name,
@@ -78,7 +79,9 @@ export class AuthService {
       },
     });
 
-    return account;
+    await this._verificationService.sendVerificationToken(account.id);
+
+    return true;
   }
 
   public signOut(req: Request) {
