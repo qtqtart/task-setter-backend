@@ -79,7 +79,7 @@ export class AuthService {
       },
     });
 
-    await this._verificationService.sendVerificationToken(account.id);
+    await this._verificationService.sendVerificationMail(account.id);
 
     return true;
   }
