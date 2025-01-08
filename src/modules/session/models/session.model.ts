@@ -1,5 +1,4 @@
 import { Field, ID, ObjectType } from "@nestjs/graphql";
-import { IsNotEmpty, IsString } from "class-validator";
 import { Session } from "express-session";
 
 import { SessionMetadata } from "../types/session-metadata.types";
@@ -16,8 +15,6 @@ export class SessionModel
   public createdAt: Date;
 
   @Field(() => String)
-  @IsString()
-  @IsNotEmpty()
   public userId: string;
 
   @Field(() => SessionMetadataModel)
