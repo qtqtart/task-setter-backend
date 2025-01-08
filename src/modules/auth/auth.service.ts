@@ -1,6 +1,6 @@
 import { PrismaService } from "@app/prisma/prisma.service";
 import { ResetPasswordInput } from "@modules/reset-password/inputs/reset-password.input";
-import { UpdatePasswordAfterResetInput } from "@modules/reset-password/inputs/update-passwort-after-reset.input";
+import { UpdatePasswordAfterConfirmMailInput } from "@modules/reset-password/inputs/update-passwort-after-confirm-mail.input";
 import { ResetPasswordService } from "@modules/reset-password/reset-password.service";
 import { SessionService } from "@modules/session/session.service";
 import { VerificationEmailService } from "@modules/verification-email/verification-email.service";
@@ -99,7 +99,11 @@ export class AuthService {
     return await this._resetPasswordService.resetPassword(input);
   }
 
-  public async updatePasswordAfterReset(input: UpdatePasswordAfterResetInput) {
-    return await this._resetPasswordService.updatePasswordAfterReset(input);
+  public async updatePasswordAfterConfirmMail(
+    input: UpdatePasswordAfterConfirmMailInput,
+  ) {
+    return await this._resetPasswordService.updatePasswordAfterConfirmMail(
+      input,
+    );
   }
 }

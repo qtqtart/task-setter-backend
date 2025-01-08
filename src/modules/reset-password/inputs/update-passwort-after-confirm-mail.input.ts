@@ -10,7 +10,7 @@ import {
 } from "class-validator";
 
 @InputType()
-export class UpdatePasswordAfterResetInput {
+export class UpdatePasswordAfterConfirmMailInput {
   @Field(() => String)
   @IsString()
   @IsNotEmpty()
@@ -23,7 +23,7 @@ export class UpdatePasswordAfterResetInput {
   @IsNotEmpty()
   @MinLength(6)
   @MaxLength(255)
-  @Match(UpdatePasswordAfterResetInput, (i) => i.password)
+  @Match(UpdatePasswordAfterConfirmMailInput, (i) => i.password)
   public passwordMatched: string;
 
   @Field(() => String)

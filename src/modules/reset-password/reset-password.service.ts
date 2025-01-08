@@ -11,7 +11,7 @@ import { TokenType } from "@prisma/client";
 import { hash } from "argon2";
 
 import { ResetPasswordInput } from "./inputs/reset-password.input";
-import { UpdatePasswordAfterResetInput } from "./inputs/update-passwort-after-reset.input";
+import { UpdatePasswordAfterConfirmMailInput } from "./inputs/update-passwort-after-confirm-mail.input";
 
 @Injectable()
 export class ResetPasswordService {
@@ -47,7 +47,9 @@ export class ResetPasswordService {
     return true;
   }
 
-  public async updatePasswordAfterReset(input: UpdatePasswordAfterResetInput) {
+  public async updatePasswordAfterConfirmMail(
+    input: UpdatePasswordAfterConfirmMailInput,
+  ) {
     const token = await this._prismaService.token.findFirst({
       where: {
         id: input.tokenId,

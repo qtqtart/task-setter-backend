@@ -15,8 +15,7 @@
     "noImplicitAny": false,
     "strictBindCallApply": false,
     "forceConsistentCasingInFileNames": false,
-    "noFallthroughCasesInSwitch": false,
-    "jsx": "react"
+    "noFallthroughCasesInSwitch": false
   },
   "extends": "./tsconfig.paths.json"
 }

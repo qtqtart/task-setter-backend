@@ -2,7 +2,7 @@ import { PrismaService } from "@app/prisma/prisma.service";
 
 import { ConflictException, Injectable } from "@nestjs/common";
 
-import { UpdateAccountDetailsInput } from "./inputs/update-account-details.input";
+import { UpdateAccountInput } from "./inputs/update-account.input";
 
 @Injectable()
 export class AccountService {
@@ -18,7 +18,7 @@ export class AccountService {
     return user;
   }
 
-  public async updateDetails(userId: string, input: UpdateAccountDetailsInput) {
+  public async update(userId: string, input: UpdateAccountInput) {
     const user = await this._prismaService.user.findUnique({
       where: {
         username: input.username,

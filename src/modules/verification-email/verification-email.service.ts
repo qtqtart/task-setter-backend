@@ -61,7 +61,7 @@ export class VerificationEmailService {
     );
 
     await this._mailerService.verificationEmail(
-      "verify your user",
+      "verify your email",
       token.user.username,
       token.user.email,
       token.id,

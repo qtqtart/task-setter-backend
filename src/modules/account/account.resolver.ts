@@ -5,7 +5,7 @@ import { Authorized } from "@shared/decorators/authorized.decorator";
 import { Args, Mutation, Query, Resolver } from "@nestjs/graphql";
 
 import { AccountService } from "./account.service";
-import { UpdateAccountDetailsInput } from "./inputs/update-account-details.input";
+import { UpdateAccountInput } from "./inputs/update-account.input";
 
 @Resolver("Account")
 export class AccountResolver {
@@ -21,12 +21,12 @@ export class AccountResolver {
 
   @Auth()
   @Mutation(() => UserModel, {
-    name: "updateAccountDetails",
+    name: "updateAccount",
   })
-  public async updateDetails(
+  public async update(
     @Authorized("id") id: string,
-    @Args("input") input: UpdateAccountDetailsInput,
+    @Args("input") input: UpdateAccountInput,
   ) {
-    return await this._accountService.updateDetails(id, input);
+    return await this._accountService.update(id, input);
   }
 }

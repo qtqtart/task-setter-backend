@@ -1,4 +1,4 @@
-import { Field, ObjectType } from "@nestjs/graphql";
+import { Field, ID, ObjectType } from "@nestjs/graphql";
 import { User } from "@prisma/client";
 import {
   IsBoolean,
@@ -7,20 +7,14 @@ import {
   IsNotEmpty,
   IsOptional,
   IsString,
-  IsUUID,
-  MaxLength,
 } from "class-validator";
 
 @ObjectType()
 export class UserModel implements User {
-  @Field(() => String)
-  @IsUUID("4")
-  @IsString()
-  @IsNotEmpty()
+  @Field(() => ID)
   public id: string;
 
   @Field(() => Date)
-  @IsDate()
   public createdAt: Date;
 
   @Field(() => Date)

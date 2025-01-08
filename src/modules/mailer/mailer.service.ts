@@ -2,8 +2,6 @@ import { EnvironmentService } from "@app/environment/environment.service";
 
 import { Injectable } from "@nestjs/common";
 import { MailerService as NestMailerService } from "@nestjs-modules/mailer";
-import { render } from "@react-email/components";
-import { VerificationEmailTemplate } from "templates/verification-email.template";
 
 @Injectable()
 export class MailerService {
@@ -20,7 +18,7 @@ export class MailerService {
   ) {
     const href = `${this._environmentService.get("ALLOWED_ORIGIN")}/auth/reset_password?tokenId=${tokenId}`;
 
-    const html = ``;
+    const html = `Hi ${username}, ${href}`;
 
     return await this._mailerService.sendMail({
       subject,
@@ -37,12 +35,7 @@ export class MailerService {
   ) {
     const href = `${this._environmentService.get("ALLOWED_ORIGIN")}/account/verification_email?tokenId=${tokenId}`;
 
-    const template = VerificationEmailTemplate({
-      subject,
-      username,
-      href,
-    });
-    const html = await render(template);
+    const html = `Hi ${username}, ${href}`;
 
     return await this._mailerService.sendMail({
       subject,

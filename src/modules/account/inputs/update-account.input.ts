@@ -1,20 +1,14 @@
 import { Field, InputType } from "@nestjs/graphql";
 import { User } from "@prisma/client";
-import {
-  IsNotEmpty,
-  IsOptional,
-  IsString,
-  Matches,
-  MaxLength,
-} from "class-validator";
+import { IsOptional, IsString, Matches, MaxLength } from "class-validator";
 
 @InputType()
-export class UpdateAccountDetailsInput
-  implements Pick<User, "username" | "bio">
-{
-  @Field(() => String)
+export class UpdateAccountInput implements Pick<User, "username" | "bio"> {
+  @Field(() => String, {
+    nullable: true,
+  })
+  @IsOptional()
   @IsString()
-  @IsNotEmpty()
   @MaxLength(255)
   @Matches(/^[A-Za-z0-9]+$/)
   public username: string;
