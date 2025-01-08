@@ -24,7 +24,7 @@ export class UpdatePasswordAfterResetInput {
   @MinLength(6)
   @MaxLength(255)
   @Match(UpdatePasswordAfterResetInput, (i) => i.password)
-  public passwordConfirm: string;
+  public passwordMatched: string;
 
   @Field(() => String)
   @IsString()

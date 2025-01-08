@@ -1,4 +1,4 @@
-import { Authorization } from "@shared/decorators/authorization.decorator";
+import { Auth } from "@shared/decorators/auth.decorator";
 import { Authorized } from "@shared/decorators/authorized.decorator";
 
 import { Query, Resolver } from "@nestjs/graphql";
@@ -9,7 +9,7 @@ import { TokenService } from "./token.service";
 export class TokenResolver {
   constructor(private readonly _tokenService: TokenService) {}
 
-  @Authorization()
+  @Auth()
   @Query(() => [String], {
     name: "findCurrentTokens",
   })

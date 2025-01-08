@@ -1,4 +1,4 @@
-import { Authorization } from "@shared/decorators/authorization.decorator";
+import { Auth } from "@shared/decorators/auth.decorator";
 
 import { Query, Resolver } from "@nestjs/graphql";
 
@@ -9,7 +9,7 @@ import { UserService } from "./user.service";
 export class UserResolver {
   constructor(private readonly _userService: UserService) {}
 
-  @Authorization()
+  @Auth()
   @Query(() => UserModel, {
     name: "findAllUsers",
   })

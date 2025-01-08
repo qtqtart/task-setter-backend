@@ -1,4 +1,4 @@
-import { Authorization } from "@shared/decorators/authorization.decorator";
+import { Auth } from "@shared/decorators/auth.decorator";
 
 import { Args, Mutation, Resolver } from "@nestjs/graphql";
 
@@ -11,7 +11,7 @@ export class VerificationEmailResolver {
     private readonly _verificationEmailService: VerificationEmailService,
   ) {}
 
-  @Authorization()
+  @Auth()
   @Mutation(() => Boolean, {
     name: "verifyAccountByEmail",
   })

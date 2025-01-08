@@ -16,7 +16,7 @@ export class SignUpInput {
   @IsString()
   @IsNotEmpty()
   @MaxLength(255)
-  @Matches(/^[a-zA-Z0-9]+(?:-[a-zA-Z0-9]+)*$/)
+  @Matches(/^[A-Za-z0-9]+$/)
   public username: string;
 
   @Field(() => String)

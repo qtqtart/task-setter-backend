@@ -55,7 +55,6 @@ export class UserModel implements User {
   })
   @IsOptional()
   @IsString()
-  @MaxLength(1000)
   public bio: string;
 
   @Field(() => Boolean)

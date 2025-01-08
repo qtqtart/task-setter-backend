@@ -1,4 +1,4 @@
-import { Authorization } from "@shared/decorators/authorization.decorator";
+import { Auth } from "@shared/decorators/auth.decorator";
 import { GqlContext } from "@shared/types/graphql-context.types";
 
 import { Args, Context, Mutation, Query, Resolver } from "@nestjs/graphql";
@@ -10,7 +10,7 @@ import { SessionService } from "./session.service";
 export class SessionResolver {
   public constructor(private readonly _sessionService: SessionService) {}
 
-  @Authorization()
+  @Auth()
   @Query(() => SessionModel, {
     name: "findCurrentSession",
   })
@@ -18,7 +18,7 @@ export class SessionResolver {
     return await this._sessionService.findCurrent(req);
   }
 
-  @Authorization()
+  @Auth()
   @Query(() => [SessionModel], {
     name: "findAllSessionExceptCurrent",
   })
@@ -26,7 +26,7 @@ export class SessionResolver {
     return await this._sessionService.findAllExceptCurrent(req);
   }
 
-  @Authorization()
+  @Auth()
   @Mutation(() => Boolean, {
     name: "deleteExceptCurrentSession",
   })
@@ -37,7 +37,7 @@ export class SessionResolver {
     return await this._sessionService.deleteExceptCurrent(req, id);
   }
 
-  @Authorization()
+  @Auth()
   @Mutation(() => Boolean, {
     name: "deleteAllSessionExceptCurrent",
   })

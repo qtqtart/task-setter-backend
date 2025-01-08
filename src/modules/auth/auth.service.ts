@@ -40,6 +40,12 @@ export class AuthService {
       throw new NotFoundException("user not found by name and email");
     }
 
+    if (!user.isVerifiedByEmail) {
+      await this._verificationEmailService.sendMail(user.id);
+
+      throw new ConflictException("user is not verified");
+    }
+
     const isVerifiedPassword = await verify(user.passwordHash, input.password);
 
     if (!isVerifiedPassword) {

@@ -54,14 +54,14 @@ export class VerificationEmailService {
     return true;
   }
 
-  public async sendMail(accountId: string) {
+  public async sendMail(userId: string) {
     const token = await this._tokenService.generate(
-      accountId,
+      userId,
       TokenType.VERIFICATION_EMAIL,
     );
 
     await this._mailerService.verificationEmail(
-      "verify your account",
+      "verify your user",
       token.user.username,
       token.user.email,
       token.id,
