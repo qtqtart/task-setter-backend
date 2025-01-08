@@ -3,7 +3,7 @@ import { EnvironmentService } from "@app/environment/environment.service";
 import { Injectable } from "@nestjs/common";
 import { MailerService as NestMailerService } from "@nestjs-modules/mailer";
 import { render } from "@react-email/components";
-import { VerificationTemplate } from "templates/verification.template";
+import { VerificationEmailTemplate } from "templates/verification-email.template";
 
 @Injectable()
 export class MailerService {
@@ -12,15 +12,32 @@ export class MailerService {
     private readonly _environmentService: EnvironmentService,
   ) {}
 
-  public async sendVerificationMail(
+  public async resetPasswort(
     subject: string,
     username: string,
     to: string,
     tokenId: string,
   ) {
-    const href = `${this._environmentService.get("ALLOWED_ORIGIN")}/account/verification?tokenId=${tokenId}`;
+    const href = `${this._environmentService.get("ALLOWED_ORIGIN")}/auth/reset_password?tokenId=${tokenId}`;
 
-    const template = VerificationTemplate({
+    const html = ``;
+
+    return await this._mailerService.sendMail({
+      subject,
+      to,
+      html,
+    });
+  }
+
+  public async verificationEmail(
+    subject: string,
+    username: string,
+    to: string,
+    tokenId: string,
+  ) {
+    const href = `${this._environmentService.get("ALLOWED_ORIGIN")}/account/verification_email?tokenId=${tokenId}`;
+
+    const template = VerificationEmailTemplate({
       subject,
       username,
       href,

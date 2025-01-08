@@ -3,16 +3,12 @@ import { PrismaService } from "@app/prisma/prisma.service";
 import { Injectable } from "@nestjs/common";
 
 @Injectable()
-export class AccountService {
+export class UserService {
   public constructor(private readonly _prismaService: PrismaService) {}
 
-  public async findMe(id: string) {
-    const user = await this._prismaService.user.findUnique({
-      where: {
-        id,
-      },
-    });
+  public async findAll() {
+    const users = await this._prismaService.user.findMany();
 
-    return user;
+    return users;
   }
 }

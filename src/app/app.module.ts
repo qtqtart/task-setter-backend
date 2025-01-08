@@ -1,9 +1,11 @@
 import { AccountModule } from "@modules/account/account.module";
 import { AuthModule } from "@modules/auth/auth.module";
 import { MailerModule } from "@modules/mailer/mailer.module";
+import { ResetPasswordModule } from "@modules/reset-password/reset-password.module";
 import { SessionModule } from "@modules/session/session.module";
 import { TokenModule } from "@modules/token/token.module";
-import { VerificationModule } from "@modules/verification/verification.module";
+import { UserModule } from "@modules/user/user.module";
+import { VerificationEmailModule } from "@modules/verification-email/verification-email.module";
 
 import { ApolloDriver } from "@nestjs/apollo";
 import { Module } from "@nestjs/common";
@@ -30,9 +32,11 @@ import { RedisModule } from "./redis/redis.module";
     AccountModule,
     AuthModule,
     MailerModule,
+    ResetPasswordModule,
     SessionModule,
     TokenModule,
-    VerificationModule,
+    UserModule,
+    VerificationEmailModule,
   ],
 })
 export class AppModule {}

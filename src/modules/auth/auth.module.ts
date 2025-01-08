@@ -1,7 +1,8 @@
 import { MailerModule } from "@modules/mailer/mailer.module";
+import { ResetPasswordService } from "@modules/reset-password/reset-password.service";
 import { SessionService } from "@modules/session/session.service";
 import { TokenService } from "@modules/token/token.service";
-import { VerificationService } from "@modules/verification/verification.service";
+import { VerificationEmailService } from "@modules/verification-email/verification-email.service";
 
 import { Module } from "@nestjs/common";
 
@@ -13,9 +14,10 @@ import { AuthService } from "./auth.service";
   providers: [
     AuthResolver,
     AuthService,
+    ResetPasswordService,
     SessionService,
-    VerificationService,
     TokenService,
+    VerificationEmailService,
   ],
 })
 export class AuthModule {}

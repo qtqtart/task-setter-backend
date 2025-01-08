@@ -10,7 +10,7 @@ import * as cookieParser from "cookie-parser";
 import * as session from "express-session";
 
 (async () => {
-  const { _30days } = TO_MS;
+  const ms = TO_MS._30days;
 
   const app = await NestFactory.create(AppModule);
 
@@ -36,7 +36,7 @@ import * as session from "express-session";
         domain: environmentService.get("SESSION_DOMAIN"),
         secure: environmentService.get("SESSION_SECURE"),
         httpOnly: environmentService.get("SESSION_HTTP_ONLY"),
-        maxAge: _30days,
+        maxAge: ms,
         sameSite: "lax",
       },
       store: new RedisStore({

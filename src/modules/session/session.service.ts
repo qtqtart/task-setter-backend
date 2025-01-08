@@ -55,11 +55,11 @@ export class SessionService {
     return sessionMetadata;
   }
 
-  public save(req: Request, accountId: string, userAgent: string) {
+  public save(req: Request, userId: string, userAgent: string) {
     const metadata = this.getMetadata(req, userAgent);
 
     return new Promise((resolve, reject) => {
-      req.session.accountId = accountId;
+      req.session.userId = userId;
       req.session.metadata = metadata;
 
       req.session.save((error) => {
@@ -106,7 +106,7 @@ export class SessionService {
   }
 
   public async findAllExceptCurrent(req: Request) {
-    const accountId = req.account.id;
+    const userId = req.user.id;
     const sessionId = req.session.id;
 
     const keys = await this._redisService.keys("*");
@@ -121,7 +121,7 @@ export class SessionService {
           id: key.split(":")[1],
         }));
 
-      if (session.accountId === accountId) {
+      if (session.userId === userId) {
         sessions.push(session);
       }
     }

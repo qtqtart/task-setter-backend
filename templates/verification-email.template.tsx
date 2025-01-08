@@ -15,7 +15,11 @@ type Props = {
   href: string;
 };
 
-export const VerificationTemplate = ({ subject, username, href }: Props) => {
+export const VerificationEmailTemplate = ({
+  subject,
+  username,
+  href,
+}: Props) => {
   return (
     <Html>
       <Head />

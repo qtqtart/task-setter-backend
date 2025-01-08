@@ -2,30 +2,15 @@ import { Match } from "@shared/decorators/match.decorator";
 
 import { Field, InputType } from "@nestjs/graphql";
 import {
-  IsEmail,
   IsNotEmpty,
   IsString,
-  Matches,
+  IsUUID,
   MaxLength,
   MinLength,
 } from "class-validator";
 
 @InputType()
-export class SignUpInput {
-  @Field(() => String)
-  @IsString()
-  @IsNotEmpty()
-  @MaxLength(255)
-  @Matches(/^[a-zA-Z0-9]+(?:-[a-zA-Z0-9]+)*$/)
-  public username: string;
-
-  @Field(() => String)
-  @IsEmail()
-  @IsString()
-  @IsNotEmpty()
-  @MaxLength(255)
-  public email: string;
-
+export class UpdatePasswordAfterResetInput {
   @Field(() => String)
   @IsString()
   @IsNotEmpty()
@@ -38,6 +23,12 @@ export class SignUpInput {
   @IsNotEmpty()
   @MinLength(6)
   @MaxLength(255)
-  @Match(SignUpInput, (i) => i.password)
-  public passwordMatched: string;
+  @Match(UpdatePasswordAfterResetInput, (i) => i.password)
+  public passwordConfirm: string;
+
+  @Field(() => String)
+  @IsString()
+  @IsUUID("4")
+  @IsNotEmpty()
+  public tokenId: string;
 }

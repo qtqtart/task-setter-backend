@@ -9,19 +9,20 @@ import {
 } from "@nestjs/common";
 import { TokenType } from "@prisma/client";
 
+import { VerificationEmailInput } from "./inputs/verification-email.input";
+
 @Injectable()
-export class VerificationService {
+export class VerificationEmailService {
   public constructor(
     private readonly _prismaService: PrismaService,
     private readonly _mailerService: MailerService,
     private readonly _tokenService: TokenService,
   ) {}
 
-  public async verifyAccount(accountId: string) {
+  public async verify(input: VerificationEmailInput) {
     const token = await this._prismaService.token.findFirst({
       where: {
-        type: TokenType.EMAIL_VERIFICATION,
-        accountId,
+        id: input.tokenId,
       },
     });
 
@@ -29,18 +30,18 @@ export class VerificationService {
       throw new NotFoundException("token not found");
     }
 
-    const isExpires = new Date(token.expiresIn) < new Date();
+    const isExpired = new Date(token.expiresIn) < new Date();
 
-    if (isExpires) {
+    if (isExpired) {
       throw new ConflictException("token is expired");
     }
 
-    await this._prismaService.account.update({
+    await this._prismaService.user.update({
       where: {
-        id: token.accountId,
+        id: token.userId,
       },
       data: {
-        isVerifiedEmail: true,
+        isVerifiedByEmail: true,
       },
     });
 
@@ -53,16 +54,16 @@ export class VerificationService {
     return true;
   }
 
-  public async sendVerificationMail(accountId: string) {
+  public async sendMail(accountId: string) {
     const token = await this._tokenService.generate(
       accountId,
-      "EMAIL_VERIFICATION",
+      TokenType.VERIFICATION_EMAIL,
     );
 
-    await this._mailerService.sendVerificationMail(
+    await this._mailerService.verificationEmail(
       "verify your account",
-      token.account.name,
-      token.account.email,
+      token.user.username,
+      token.user.email,
       token.id,
     );
 

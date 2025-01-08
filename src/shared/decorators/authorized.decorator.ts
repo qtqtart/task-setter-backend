@@ -1,23 +1,23 @@
 import { createParamDecorator, ExecutionContext } from "@nestjs/common";
 import { GqlExecutionContext } from "@nestjs/graphql";
-import { Account } from "@prisma/client";
+import { User } from "@prisma/client";
 import { Request } from "express";
 
 export const Authorized = createParamDecorator(
-  (key: keyof Account, context: ExecutionContext) => {
-    let account: Account;
+  (key: keyof User, context: ExecutionContext) => {
+    let user: User;
 
     if (context.getType() === "http") {
       const req: Request = context.switchToHttp().getRequest();
 
-      account = req.account;
+      user = req.user;
     } else {
       const gqlContext = GqlExecutionContext.create(context).getContext();
       const req: Request = gqlContext.req;
 
-      account = req.account;
+      user = req.user;
     }
 
-    return key ? account[key] : account;
+    return key ? user[key] : user;
   },
 );

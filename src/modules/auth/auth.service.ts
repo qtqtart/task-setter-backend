@@ -1,6 +1,9 @@
 import { PrismaService } from "@app/prisma/prisma.service";
+import { ResetPasswordInput } from "@modules/reset-password/inputs/reset-password.input";
+import { UpdatePasswordAfterResetInput } from "@modules/reset-password/inputs/update-passwort-after-reset.input";
+import { ResetPasswordService } from "@modules/reset-password/reset-password.service";
 import { SessionService } from "@modules/session/session.service";
-import { VerificationService } from "@modules/verification/verification.service";
+import { VerificationEmailService } from "@modules/verification-email/verification-email.service";
 
 import {
   ConflictException,
@@ -18,73 +21,79 @@ import { SignUpInput } from "./inputs/sign-up.input";
 export class AuthService {
   public constructor(
     private readonly _prismaService: PrismaService,
+    private readonly _resetPasswordService: ResetPasswordService,
     private readonly _sessionService: SessionService,
-    private readonly _verificationService: VerificationService,
+    private readonly _verificationEmailService: VerificationEmailService,
   ) {}
 
   public async signIn(req: Request, input: SignInInput, userAgent: string) {
-    const account = await this._prismaService.account.findFirst({
+    const user = await this._prismaService.user.findFirst({
       where: {
         OR: [
-          { name: { equals: input.login } },
+          { username: { equals: input.login } },
           { email: { equals: input.login } },
         ],
       },
     });
 
-    if (!account) {
-      throw new NotFoundException("account not found by name and email");
+    if (!user) {
+      throw new NotFoundException("user not found by name and email");
     }
 
-    const isVerifiedPassword = await verify(
-      account.passwordHash,
-      input.password,
-    );
+    const isVerifiedPassword = await verify(user.passwordHash, input.password);
 
     if (!isVerifiedPassword) {
       throw new UnauthorizedException("invalid password");
     }
 
-    return this._sessionService.save(req, account.id, userAgent);
+    return this._sessionService.save(req, user.id, userAgent);
   }
 
   public async signUp(input: SignUpInput) {
-    const isExistByName = await this._prismaService.account.findUnique({
+    const isExistByName = await this._prismaService.user.findUnique({
       where: {
-        name: input.name,
+        username: input.username,
       },
     });
 
     if (isExistByName) {
-      throw new ConflictException("account already exist by name");
+      throw new ConflictException("user already exist by name");
     }
 
-    const isExistByEmail = await this._prismaService.account.findUnique({
+    const isExistByEmail = await this._prismaService.user.findUnique({
       where: {
         email: input.email,
       },
     });
 
     if (isExistByEmail) {
-      throw new ConflictException("account already exist by email");
+      throw new ConflictException("user already exist by email");
     }
 
     const passwordHash = await hash(input.password);
 
-    const account = await this._prismaService.account.create({
+    const user = await this._prismaService.user.create({
       data: {
-        name: input.name,
+        username: input.username,
         email: input.email,
         passwordHash,
       },
     });
 
-    await this._verificationService.sendVerificationMail(account.id);
+    await this._verificationEmailService.sendMail(user.id);
 
     return true;
   }
 
   public signOut(req: Request) {
     return this._sessionService.destroy(req);
+  }
+
+  public async resetPassword(input: ResetPasswordInput) {
+    return await this._resetPasswordService.resetPassword(input);
+  }
+
+  public async updatePasswordAfterReset(input: UpdatePasswordAfterResetInput) {
+    return await this._resetPasswordService.updatePasswordAfterReset(input);
   }
 }

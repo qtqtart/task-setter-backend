@@ -1,28 +1,28 @@
 import { PrismaService } from "@app/prisma/prisma.service";
 import { TO_MS } from "@shared/consts/to-ms.const";
 
-import {
-  ConflictException,
-  Injectable,
-  NotFoundException,
-} from "@nestjs/common";
+import { Injectable } from "@nestjs/common";
 import { TokenType } from "@prisma/client";
-import { v4 as uuidv4 } from "uuid";
 
 @Injectable()
 export class TokenService {
   public constructor(private readonly _prismaService: PrismaService) {}
 
-  public async generate(accountId: string, tokenType: TokenType) {
-    const { _15mins } = TO_MS;
+  public async generate(userId: string, tokenType: TokenType) {
+    let ms: number;
 
-    const tokenPayload = uuidv4();
-    const expiresIn = new Date(new Date().getTime() + _15mins);
+    if (tokenType === TokenType.RESET_PASSWORD) {
+      ms = TO_MS._1hour;
+    } else if (tokenType === TokenType.VERIFICATION_EMAIL) {
+      ms = TO_MS._1hour;
+    }
+
+    const expiresIn = new Date(new Date().getTime() + ms);
 
     const token = await this._prismaService.token.findFirst({
       where: {
         type: tokenType,
-        accountId,
+        userId,
       },
     });
 
@@ -36,18 +36,27 @@ export class TokenService {
 
     return await this._prismaService.token.create({
       data: {
-        payload: tokenPayload,
         type: tokenType,
         expiresIn,
-        account: {
+        user: {
           connect: {
-            id: accountId,
+            id: userId,
           },
         },
       },
       include: {
-        account: true,
+        user: true,
       },
     });
+  }
+
+  public async findCurrentTokens(userId: string) {
+    const tokens = await this._prismaService.token.findMany({
+      where: {
+        userId,
+      },
+    });
+
+    return tokens.map((token) => token.type);
   }
 }
