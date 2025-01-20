@@ -1,7 +1,7 @@
 import { Injectable } from "@nestjs/common";
 import { ConfigService } from "@nestjs/config";
 
-import { EnvironmentModel } from "./model/environment.model";
+import { EnvironmentModel } from "./models/environment.model";
 
 @Injectable()
 export class EnvironmentService {

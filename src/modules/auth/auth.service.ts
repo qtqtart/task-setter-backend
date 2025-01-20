@@ -1,7 +1,4 @@
 import { PrismaService } from "@app/prisma/prisma.service";
-import { ResetPasswordInput } from "@modules/reset-password/inputs/reset-password.input";
-import { UpdatePasswordAfterConfirmMailInput } from "@modules/reset-password/inputs/update-passwort-after-confirm-mail.input";
-import { ResetPasswordService } from "@modules/reset-password/reset-password.service";
 import { SessionService } from "@modules/session/session.service";
 import { VerificationEmailService } from "@modules/verification-email/verification-email.service";
 
@@ -21,7 +18,6 @@ import { SignUpInput } from "./inputs/sign-up.input";
 export class AuthService {
   public constructor(
     private readonly _prismaService: PrismaService,
-    private readonly _resetPasswordService: ResetPasswordService,
     private readonly _sessionService: SessionService,
     private readonly _verificationEmailService: VerificationEmailService,
   ) {}
@@ -43,7 +39,7 @@ export class AuthService {
     if (!user.isVerifiedByEmail) {
       await this._verificationEmailService.sendMail(user.id);
 
-      throw new ConflictException("user is not verified");
+      throw new ConflictException("user email is not verified");
     }
 
     const isVerifiedPassword = await verify(user.passwordHash, input.password);
@@ -93,17 +89,5 @@ export class AuthService {
 
   public signOut(req: Request) {
     return this._sessionService.destroy(req);
-  }
-
-  public async resetPassword(input: ResetPasswordInput) {
-    return await this._resetPasswordService.resetPassword(input);
-  }
-
-  public async updatePasswordAfterConfirmMail(
-    input: UpdatePasswordAfterConfirmMailInput,
-  ) {
-    return await this._resetPasswordService.updatePasswordAfterConfirmMail(
-      input,
-    );
   }
 }

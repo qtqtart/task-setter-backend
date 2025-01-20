@@ -4,7 +4,7 @@ import { Injectable } from "@nestjs/common";
 import { MailerService as NestMailerService } from "@nestjs-modules/mailer";
 
 @Injectable()
-export class MailerService {
+export class MailService {
   public constructor(
     private readonly _mailerService: NestMailerService,
     private readonly _environmentService: EnvironmentService,

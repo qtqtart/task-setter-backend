@@ -1,5 +1,3 @@
-import { PrismaService } from "@app/prisma/prisma.service";
-
 import {
   CanActivate,
   ExecutionContext,
@@ -11,8 +9,6 @@ import { Request } from "express";
 
 @Injectable()
 export class AuthGuard implements CanActivate {
-  public constructor(private readonly _prismaService: PrismaService) {}
-
   public async canActivate(context: ExecutionContext) {
     const gqlContext = GqlExecutionContext.create(context).getContext();
     const req: Request = gqlContext.req;
@@ -22,13 +18,7 @@ export class AuthGuard implements CanActivate {
       throw new UnauthorizedException("user is unauthorized");
     }
 
-    const user = await this._prismaService.user.findUnique({
-      where: {
-        id: userId,
-      },
-    });
-
-    req.user = user;
+    req.session.userId = userId;
 
     return true;
   }

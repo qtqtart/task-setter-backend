@@ -2,7 +2,7 @@ import { EnvironmentService } from "@app/environment/environment.service";
 
 import { MailerOptions } from "@nestjs-modules/mailer";
 
-export const getMailerConfig = (
+export const getMailConfig = (
   environmentService: EnvironmentService,
 ): MailerOptions => ({
   transport: {

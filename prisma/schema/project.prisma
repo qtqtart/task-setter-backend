@@ -1,0 +1,12 @@
+model Project {
+  id          String   @id @default(uuid()) @map("id")
+  createdAt   DateTime @default(now()) @map("created_at")
+  updatedAt   DateTime @updatedAt @map("updated_at")
+  title       String   @unique @db.VarChar(255)
+  description String?  @db.VarChar(1000)
+  userId      String   @map("user_id")
+  previewUrl  String?  @map("preview_s3_url")
+  user        User     @relation(fields: [userId], references: [id], onDelete: Cascade)
+
+  @@map("projects")
+}

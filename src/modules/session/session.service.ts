@@ -107,7 +107,7 @@ export class SessionService {
   }
 
   public async findAllExceptCurrent(req: Request) {
-    const userId = req.user.id;
+    const userId = req.session.userId;
     const sessionId = req.session.id;
 
     const keys = await this._redisService.keys("*");

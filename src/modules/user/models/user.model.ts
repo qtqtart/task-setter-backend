@@ -42,7 +42,7 @@ export class UserModel implements User {
   })
   @IsOptional()
   @IsString()
-  public avatar: string;
+  public avatarUrl: string;
 
   @Field(() => String, {
     nullable: true,

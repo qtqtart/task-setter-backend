@@ -1,7 +1,7 @@
 import { plainToClass } from "class-transformer";
 import { validateSync } from "class-validator";
 
-import { EnvironmentModel } from "../model/environment.model";
+import { EnvironmentModel } from "../models/environment.model";
 
 export const validate = (config: Record<string, unknown>) => {
   const validatedConfig = plainToClass(EnvironmentModel, config);

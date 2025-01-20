@@ -1,4 +1,4 @@
-import { MailerService } from "@modules/mailer/mailer.service";
+import { MailService } from "@app/mail/mail.service";
 import { TokenService } from "@modules/token/token.service";
 
 import { Module } from "@nestjs/common";
@@ -10,7 +10,7 @@ import { VerificationEmailService } from "./verification-email.service";
   providers: [
     VerificationEmailResolver,
     VerificationEmailService,
-    MailerService,
+    MailService,
     TokenService,
   ],
 })

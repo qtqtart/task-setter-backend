@@ -11,9 +11,7 @@ export class TokenService {
   public async generate(userId: string, tokenType: TokenType) {
     let ms: number;
 
-    if (tokenType === TokenType.RESET_PASSWORD) {
-      ms = TO_MS._1hour;
-    } else if (tokenType === TokenType.VERIFICATION_EMAIL) {
+    if (tokenType === TokenType.VERIFICATION_EMAIL) {
       ms = TO_MS._1hour;
     }
 
@@ -48,15 +46,5 @@ export class TokenService {
         user: true,
       },
     });
-  }
-
-  public async findCurrentTokens(userId: string) {
-    const tokens = await this._prismaService.token.findMany({
-      where: {
-        userId,
-      },
-    });
-
-    return tokens.map((token) => token.type);
   }
 }

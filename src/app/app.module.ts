@@ -1,7 +1,6 @@
 import { AccountModule } from "@modules/account/account.module";
 import { AuthModule } from "@modules/auth/auth.module";
-import { MailerModule } from "@modules/mailer/mailer.module";
-import { ResetPasswordModule } from "@modules/reset-password/reset-password.module";
+import { ProjectModule } from "@modules/project/project.module";
 import { SessionModule } from "@modules/session/session.module";
 import { TokenModule } from "@modules/token/token.module";
 import { UserModule } from "@modules/user/user.module";
@@ -14,8 +13,10 @@ import { GraphQLModule } from "@nestjs/graphql";
 
 import { getGraphQLConfig } from "./configs/graphql.config";
 import { EnvironmentModule } from "./environment/environment.module";
+import { MailModule } from "./mail/mail.module";
 import { PrismaModule } from "./prisma/prisma.module";
 import { RedisModule } from "./redis/redis.module";
+import { S3Module } from "./s3/s3.module";
 
 @Module({
   imports: [
@@ -25,18 +26,20 @@ import { RedisModule } from "./redis/redis.module";
       driver: ApolloDriver,
       useFactory: getGraphQLConfig,
     }),
+    MailModule,
     EnvironmentModule,
     PrismaModule,
     RedisModule,
+    S3Module,
     //
     AccountModule,
     AuthModule,
-    MailerModule,
-    ResetPasswordModule,
+    ProjectModule,
     SessionModule,
     TokenModule,
     UserModule,
     VerificationEmailModule,
+    S3Module,
   ],
 })
 export class AppModule {}

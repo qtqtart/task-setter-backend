@@ -1,5 +1,5 @@
+import { MailService } from "@app/mail/mail.service";
 import { PrismaService } from "@app/prisma/prisma.service";
-import { MailerService } from "@modules/mailer/mailer.service";
 import { TokenService } from "@modules/token/token.service";
 
 import {
@@ -15,7 +15,7 @@ import { VerificationEmailInput } from "./inputs/verification-email.input";
 export class VerificationEmailService {
   public constructor(
     private readonly _prismaService: PrismaService,
-    private readonly _mailerService: MailerService,
+    private readonly _mailService: MailService,
     private readonly _tokenService: TokenService,
   ) {}
 
@@ -60,7 +60,7 @@ export class VerificationEmailService {
       TokenType.VERIFICATION_EMAIL,
     );
 
-    await this._mailerService.verificationEmail(
+    await this._mailService.verificationEmail(
       "verify your email",
       token.user.username,
       token.user.email,

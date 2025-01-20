@@ -1,5 +1,3 @@
-import { Auth } from "@shared/decorators/auth.decorator";
-
 import { Args, Mutation, Resolver } from "@nestjs/graphql";
 
 import { VerificationEmailInput } from "./inputs/verification-email.input";
@@ -11,7 +9,6 @@ export class VerificationEmailResolver {
     private readonly _verificationEmailService: VerificationEmailService,
   ) {}
 
-  @Auth()
   @Mutation(() => Boolean, {
     name: "verifyAccountByEmail",
   })

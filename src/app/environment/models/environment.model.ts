@@ -91,6 +91,39 @@ export class EnvironmentModel implements Environment {
   @IsString()
   public MAILER_PASSWORD: string;
 
+  @ToPositiveNumber()
+  @IsNumber()
+  @Min(0)
+  @Max(65535)
+  public MINIO_PORT: number;
+
+  @ToPositiveNumber()
+  @IsNumber()
+  @Min(0)
+  @Max(65535)
+  public MINIO_CONSOLE_PORT: number;
+
+  @IsString()
+  public MINIO_ROOT_USER: string;
+
+  @IsString()
+  public MINIO_ROOT_PASSWORD: string;
+
+  @IsString()
+  public MINIO_BUCKET: string;
+
+  @IsString()
+  public MINIO_ENDPOINT: string;
+
+  @IsString()
+  public MINIO_REGION: string;
+
+  @IsString()
+  public MINIO_ACCESS_KEY_ID: string;
+
+  @IsString()
+  public MINIO_SECRET_ACCESS_KEY: string;
+
   @IsString()
   public GRAPHQL_PREFIX: string;
 }

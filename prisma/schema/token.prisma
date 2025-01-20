@@ -12,9 +12,4 @@ model Token {
 
 enum TokenType {
   VERIFICATION_EMAIL
-
-  RESET_PASSWORD
-
-  UPDATE_EMAIL
-  UPDATE_PASSWORD
 }

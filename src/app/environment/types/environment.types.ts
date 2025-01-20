@@ -32,5 +32,15 @@ export interface Environment {
   MAILER_USER: string;
   MAILER_PASSWORD: string;
 
+  MINIO_PORT: number;
+  MINIO_CONSOLE_PORT: number;
+  MINIO_ROOT_USER: string;
+  MINIO_ROOT_PASSWORD: string;
+  MINIO_BUCKET: string;
+  MINIO_ENDPOINT: string;
+  MINIO_REGION: string;
+  MINIO_ACCESS_KEY_ID: string;
+  MINIO_SECRET_ACCESS_KEY: string;
+
   GRAPHQL_PREFIX: string;
 }
