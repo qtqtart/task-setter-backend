@@ -2,7 +2,11 @@ import { PrismaService } from "@app/prisma/prisma.service";
 import { S3Service } from "@app/s3/s3.service";
 import { createWebpBuffer } from "@shared/utils/create-webp-buffer.util";
 
-import { ConflictException, Injectable } from "@nestjs/common";
+import {
+  BadRequestException,
+  ConflictException,
+  Injectable,
+} from "@nestjs/common";
 import { Upload } from "graphql-upload-ts";
 
 import { CreateProjectInput } from "./inputs/create-project.input";
@@ -15,10 +19,10 @@ export class ProjectService {
     private readonly _s3Service: S3Service,
   ) {}
 
-  public async findById(id: string) {
+  public async findById(projectId: string) {
     const project = await this._prismaService.project.findUnique({
       where: {
-        id,
+        id: projectId,
       },
     });
 
@@ -58,8 +62,7 @@ export class ProjectService {
   public async create(userId: string, input: CreateProjectInput) {
     const project = await this._prismaService.project.create({
       data: {
-        title: input.title,
-        description: input.description,
+        ...input,
         creatorId: userId,
         particiants: {
           connect: {
@@ -78,8 +81,7 @@ export class ProjectService {
         id: projectId,
       },
       data: {
-        title: input.title,
-        description: input.description,
+        ...input,
       },
     });
 
@@ -116,10 +118,23 @@ export class ProjectService {
     return true;
   }
 
-  public async delete(id: string) {
-    await this._prismaService.project.delete({
+  public async toggleIsArchived(projectId: string) {
+    const project = await this._prismaService.project.findUnique({
       where: {
-        id,
+        id: projectId,
+      },
+    });
+
+    if (!project) {
+      throw new BadRequestException("project not found by id");
+    }
+
+    await this._prismaService.project.update({
+      where: {
+        id: projectId,
+      },
+      data: {
+        isArchived: !project.isArchived,
       },
     });
 

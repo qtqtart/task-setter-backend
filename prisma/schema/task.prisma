@@ -1,0 +1,32 @@
+model Task {
+  id          String       @id @default(uuid()) @map("id")
+  createdAt   DateTime     @default(now()) @map("created_at")
+  updatedAt   DateTime     @updatedAt @map("updated_at")
+  title       String       @unique @db.VarChar(255)
+  description String?      @db.VarChar(1000)
+  state       TaskState    @default(BACKLOG)
+  prioriry    TaskPriority @default(NONE)
+  creatorId   String       @map("creator_id")
+  isArchived  Boolean      @default(false) @map("is_archived")
+  dateEnd     DateTime?
+  dateStart   DateTime?
+  creator     User         @relation("TaskCreator", fields: [creatorId], references: [id], onDelete: Cascade)
+  assinees    User[]       @relation("TaskAssignees")
+  particiants User[]       @relation("TaskParticiants")
+
+  @@map("tasks")
+}
+
+enum TaskState {
+  BACKLOG
+  DONE
+  IN_PROGRESS
+  TODO
+}
+
+enum TaskPriority {
+  HIGH
+  MIDIUM
+  LOW
+  NONE
+}

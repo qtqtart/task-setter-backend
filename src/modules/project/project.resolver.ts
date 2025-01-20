@@ -90,10 +90,10 @@ export class ProjectResolver {
 
   @Auth()
   @Mutation(() => Boolean, {
-    name: "deleteProject",
+    name: "toggleIsArchivedProject",
   })
-  public async delete(@Args("projectId") projectId: string) {
-    return await this._projectService.delete(projectId);
+  public async toggleIsArchived(@Args("projectId") projectId: string) {
+    return await this._projectService.toggleIsArchived(projectId);
   }
 
   @Auth()

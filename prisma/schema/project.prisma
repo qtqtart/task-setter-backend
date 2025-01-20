@@ -4,8 +4,9 @@ model Project {
   updatedAt   DateTime @updatedAt @map("updated_at")
   title       String   @unique @db.VarChar(255)
   description String?  @db.VarChar(1000)
-  previewUrl  String?  @map("preview_s3_url")
   creatorId   String   @map("creator_id")
+  isArchived  Boolean  @default(false) @map("is_archived")
+  previewUrl  String?  @map("preview_url")
   creator     User     @relation("ProjectCreator", fields: [creatorId], references: [id], onDelete: Cascade)
   particiants User[]   @relation("ProjectParticiants")
 

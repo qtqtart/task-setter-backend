@@ -1,16 +1,19 @@
 model User {
-  id                String    @id @default(uuid()) @map("id")
-  createdAt         DateTime  @default(now()) @map("created_at")
-  updatedAt         DateTime  @updatedAt @map("updated_at")
-  username          String    @unique @db.VarChar(255)
-  email             String    @unique @db.VarChar(255)
-  passwordHash      String    @map("password_hash")
-  bio               String?   @db.VarChar(1000)
-  isVerifiedByEmail Boolean   @default(false) @map("is_verified_by_email")
-  avatarUrl         String?   @map("avatar_s3_url")
-  createdProjects   Project[] @relation("ProjectCreator")
-  tokens            Token[]
-  projects          Project[] @relation("ProjectParticiants")
+  id                 String    @id @default(uuid()) @map("id")
+  createdAt          DateTime  @default(now()) @map("created_at")
+  updatedAt          DateTime  @updatedAt @map("updated_at")
+  username           String    @unique @db.VarChar(255)
+  email              String    @unique @db.VarChar(255)
+  passwordHash       String    @map("password_hash")
+  bio                String?   @db.VarChar(1000)
+  isVerifiedByEmail  Boolean   @default(false) @map("is_verified_by_email")
+  avatarUrl          String?   @map("avatar_url")
+  createdProjects    Project[] @relation("ProjectCreator")
+  createdTask        Task[]    @relation("TaskCreator")
+  tokens             Token[]
+  particiantProjects Project[] @relation("ProjectParticiants")
+  assignedTasks      Task[]    @relation("TaskAssignees")
+  particiantTasks    Task[]    @relation("TaskParticiants")
 
   @@map("users")
 }

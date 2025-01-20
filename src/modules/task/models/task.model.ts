@@ -1,5 +1,5 @@
 import { Field, ID, ObjectType } from "@nestjs/graphql";
-import { Project } from "@prisma/client";
+import { Task, TaskPriority, TaskState } from "@prisma/client";
 import {
   IsBoolean,
   IsDate,
@@ -9,7 +9,7 @@ import {
 } from "class-validator";
 
 @ObjectType()
-export class ProjectModel implements Project {
+export class TaskModel implements Task {
   @Field(() => ID)
   @IsString()
   @IsNotEmpty()
@@ -39,12 +39,21 @@ export class ProjectModel implements Project {
   @IsBoolean()
   public isArchived: boolean;
 
-  @Field(() => String, {
+  @Field(() => Date, {
     nullable: true,
   })
-  @IsOptional()
-  @IsString()
-  public previewUrl: string;
+  public dateStart: Date;
+
+  @Field(() => Date, {
+    nullable: true,
+  })
+  public dateEnd: Date;
+
+  @Field(() => TaskState)
+  public state: TaskState;
+
+  @Field(() => TaskPriority)
+  public prioriry: TaskPriority;
 
   @Field(() => String)
   @IsString()
