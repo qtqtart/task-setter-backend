@@ -1,3 +1,4 @@
+import { UserModel } from "@modules/user/models/user.model";
 import { Auth } from "@shared/decorators/auth.decorator";
 import { Authorized } from "@shared/decorators/authorized.decorator";
 import { FileValidationPipe } from "@shared/pipes/file-validation.pipe";
@@ -18,8 +19,8 @@ export class ProjectResolver {
   @Query(() => ProjectModel, {
     name: "findProjectById",
   })
-  public async findById(@Args("id") id: string) {
-    return await this._projectService.findById(id);
+  public async findById(@Args("projectId") projectId: string) {
+    return await this._projectService.findById(projectId);
   }
 
   @Auth()
@@ -28,6 +29,16 @@ export class ProjectResolver {
   })
   public async findAllByUserId(@Authorized() userId: string) {
     return await this._projectService.findAllByUserId(userId);
+  }
+
+  @Auth()
+  @Query(() => [UserModel], {
+    name: "findParticiantsByProjectId",
+  })
+  public async findParticiantsByProjectId(
+    @Args("projectId") projectId: string,
+  ) {
+    return await this._projectService.findParticiantsByProjectId(projectId);
   }
 
   @Auth()
@@ -46,18 +57,43 @@ export class ProjectResolver {
     name: "updateProject",
   })
   public async update(
-    @Args("id") id: string,
+    @Args("projectId") projectId: string,
     @Args("input") input: UpdateProjectInput,
   ) {
-    return await this._projectService.update(id, input);
+    return await this._projectService.update(projectId, input);
+  }
+
+  @Auth()
+  @Mutation(() => Boolean, {
+    name: "addParticiantToProject",
+  })
+  public async addParticiants(
+    @Args("projectId") projectId: string,
+    @Args("particiantIds") particiantIds: string[],
+  ) {
+    return await this._projectService.addParticiants(projectId, particiantIds);
+  }
+
+  @Auth()
+  @Mutation(() => Boolean, {
+    name: "removeParticiantFromProject",
+  })
+  public async removeParticiants(
+    @Args("projectId") projectId: string,
+    @Args("particiantIds") particiantIds: string[],
+  ) {
+    return await this._projectService.removeParticiants(
+      projectId,
+      particiantIds,
+    );
   }
 
   @Auth()
   @Mutation(() => Boolean, {
     name: "deleteProject",
   })
-  public async delete(@Args("id") id: string) {
-    return await this._projectService.delete(id);
+  public async delete(@Args("projectId") projectId: string) {
+    return await this._projectService.delete(projectId);
   }
 
   @Auth()
@@ -65,7 +101,7 @@ export class ProjectResolver {
     name: "uploadProjectPreview",
   })
   public async uploadPreview(
-    @Args("id") id: string,
+    @Args("projectId") projectId: string,
     @Args(
       "uploud",
       {
@@ -75,14 +111,14 @@ export class ProjectResolver {
     )
     upload: Upload,
   ) {
-    return await this._projectService.uploadPreview(id, upload);
+    return await this._projectService.uploadPreview(projectId, upload);
   }
 
   @Auth()
   @Mutation(() => Boolean, {
     name: "deleteProjectPreview",
   })
-  public async deletePreview(@Args("id") id: string) {
-    return await this._projectService.deletePreview(id);
+  public async deletePreview(@Args("projectId") projectId: string) {
+    return await this._projectService.deletePreview(projectId);
   }
 }

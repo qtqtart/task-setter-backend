@@ -39,7 +39,6 @@ import { S3Module } from "./s3/s3.module";
     TokenModule,
     UserModule,
     VerificationEmailModule,
-    S3Module,
   ],
 })
 export class AppModule {}

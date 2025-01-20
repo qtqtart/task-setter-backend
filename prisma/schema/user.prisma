@@ -8,8 +8,9 @@ model User {
   bio               String?   @db.VarChar(1000)
   isVerifiedByEmail Boolean   @default(false) @map("is_verified_by_email")
   avatarUrl         String?   @map("avatar_s3_url")
-  projects          Project[]
+  createdProjects   Project[] @relation("ProjectCreator")
   tokens            Token[]
+  projects          Project[] @relation("ProjectParticiants")
 
   @@map("users")
 }

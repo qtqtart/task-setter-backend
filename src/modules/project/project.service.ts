@@ -25,10 +25,30 @@ export class ProjectService {
     return project;
   }
 
+  public async findParticiantsByProjectId(projectId: string) {
+    const project = await this._prismaService.project.findUnique({
+      where: {
+        id: projectId,
+      },
+      include: {
+        particiants: true,
+      },
+    });
+
+    return project.particiants;
+  }
+
   public async findAllByUserId(userId: string) {
     const projects = await this._prismaService.project.findMany({
       where: {
-        userId,
+        OR: [
+          {
+            creatorId: userId,
+          },
+          {
+            particiants: { some: { id: userId } },
+          },
+        ],
       },
     });
 
@@ -40,7 +60,12 @@ export class ProjectService {
       data: {
         title: input.title,
         description: input.description,
-        userId,
+        creatorId: userId,
+        particiants: {
+          connect: {
+            id: userId,
+          },
+        },
       },
     });
 
@@ -59,6 +84,36 @@ export class ProjectService {
     });
 
     return project;
+  }
+
+  public async addParticiants(projectId: string, particiantIds: string[]) {
+    await this._prismaService.project.update({
+      where: {
+        id: projectId,
+      },
+      data: {
+        particiants: {
+          connect: particiantIds.map((id) => ({ id })),
+        },
+      },
+    });
+
+    return true;
+  }
+
+  public async removeParticiants(projectId: string, particiantIds: string[]) {
+    await this._prismaService.project.update({
+      where: {
+        id: projectId,
+      },
+      data: {
+        particiants: {
+          disconnect: particiantIds.map((id) => ({ id })),
+        },
+      },
+    });
+
+    return true;
   }
 
   public async delete(id: string) {
